@@ -7,6 +7,36 @@
     <script src="src/index.js" charset="utf-8"></script>
   </head>
   <body>
+    <form class="login-form" method="post">
+      <input class="owner-name" type="text" name="Name" placeholder="name">
+      <input  class="owner-email" type="email" name="Email" placeholder="email">
+      <input class="owner-location" type="text" name="Location" placeholder="location">
+      <input type="submit" value="submit">
+    </form>
+    <br>
+    <br>
+    <form class="pet-form" method="post">
+      <input class="pet-name" type="text" name="Name" placeholder="name">
+      <input class="pet-species" type="text" name="Species" placeholder="species">
+      <input class="pet-age" type="number" name="age" placeholder="age">
+      <input class="pet-temperament" type="text" name="temperament"  placeholder="temperament">
+      <input class="pet-size" type="text" name="size"  placeholder="size">
+      <input class="pet-url" type="url" name="photo-url"  placeholder="photo-url">
+        <input type="submit" value="submit">
+    </form>
+    <br>
+    <br>
+    <form class="transaction-form" method="post">
+      <select name="pet">
+        <option class="pick-pet" value="pet-name">Fluff</option>
+      </select>
+      <h4>Start Date<input class="start-date" type="date" name="start" placeholder="start-date"></h4>
+      <h4>End Date<input class="end-date" type="date" name="end" placeholder="end-date"></h4>
+      <select name="sitter">
+        <option class="pick-sitter" value="sitter-name">Asaf</option>
+      </select>
+      <input type="submit" value="submit">
+    </form>
     <ul id='sitter-list'></ul>
     <ul id='owner-list'></ul>
     <ul id='pet-list'></ul>
