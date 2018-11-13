@@ -30,7 +30,6 @@ fetch('http://localhost:3000/api/v1/pets')
 .then( json => {
   allPets = json
   petList.innerHTML = renderPets(json)
-debugger;
 })
 
 fetch('http://localhost:3000/api/v1/transactions')
