@@ -1,4 +1,5 @@
 let currentUser
+
 document.addEventListener('DOMContentLoaded', (event) => {
   let allSitters = []
   let allOwners = []
@@ -12,12 +13,47 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const loginForm = document.querySelector('.login-form')
   const transactionForm = document.querySelector('.transaction-form')
   const hideContainer = document.getElementById('hidden-without-login')
+  const sitterSelectDropdown = document.getElementById('sitter-select-dropdown')
+  let petSelectDropdown = document.getElementById('pet-select-dropdown')
+
+  loginForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    let ownerName = loginForm.querySelector('.owner-name').value
+    let ownerEmail = loginForm.querySelector('.owner-email').value
+    let ownerLocation = loginForm.querySelector('.owner-location').value
+    let ownerData = {
+    name: ownerName,
+    email: ownerEmail,
+    location: ownerLocation,
+    }
+
+
+
+    fetch('http://localhost:3000/api/v1/owners', {
+      method: 'POST',
+      body: JSON.stringify(ownerData),
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => res.json())
+    .then((json) => {
+      currentUser = json
+      allOwners.push(currentUser)
+      petSelectDropdown.innerHTML = renderPetDropdown(allPets, currentUser)
+    })
+
+    loginForm.style.display = 'none'
+    hideContainer.style.display = 'block'
+  }) // End of loginForm Listener
+
 
   fetch('http://localhost:3000/api/v1/sitters')
   .then( res => res.json())
   .then( json => {
     allSitters = json
     sitterList.innerHTML = renderSitters(json)
+    sitterSelectDropdown.innerHTML = renderSitterDropdown(json)
   })
 
   fetch('http://localhost:3000/api/v1/owners')
@@ -40,6 +76,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     allTransactions = json
   })
 
+
   petForm.addEventListener('submit', (event) => {
     event.preventDefault();
     let petName = petForm.querySelector('.pet-name').value
@@ -48,7 +85,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     let petTemperament = petForm.querySelector('.pet-temperament').value
     let petSize = petForm.querySelector('.pet-size').value
     let petUrl = petForm.querySelector('.pet-url').value
-    debugger
     let data = {
     owner_id: currentUser.id,
     name: petName,
@@ -68,39 +104,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
     })
     .then(res => res.json())
     .then((json) => {
-      allPets.push(json) 
+      allPets.push(json)
       petForm.reset()
+      let petSelectDropdown = document.getElementById('pet-select-dropdown')
+      // DEBUG: Not working to render dropdown list
+      petSelectDropdown.innerHTML = renderPetDropdown(allPets, currentUser)
     })
   }) //End petForm Listener
 
-  loginForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    let ownerName = loginForm.querySelector('.owner-name').value
-    let ownerEmail = loginForm.querySelector('.owner-email').value
-    let ownerLocation = loginForm.querySelector('.owner-location').value
-    let ownerData = {
-    name: ownerName,
-    email: ownerEmail,
-    location: ownerLocation,
-    }
-
-    fetch('http://localhost:3000/api/v1/owners', {
-      method: 'POST',
-      body: JSON.stringify(ownerData),
-      headers:{
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(res => res.json())
-    .then((json) => {
-      currentUser = json
-      allOwners.push(currentUser)
-    })
-
-    loginForm.reset()
-    loginForm.style.display = 'none'
-    hideContainer.style.display = 'block'
-  }) // End of loginForm Listener
 
   transactionForm.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -137,43 +148,56 @@ document.addEventListener('DOMContentLoaded', (event) => {
 function renderSitters(sitters) {
   return sitters.map((sitter) => {
     return `
-    <li>
-            <img src="${sitter.photo_url}">
-            <h3>${sitter.name} </h3>
-            <h3>${sitter.email} </h3>
-            <h3>${sitter.location} </h3>
-            <h2>${sitter.rate} </h2>
-         <h2>${sitter.capacity} </h2>
-
-          </li>
-  `
-  }).join(' ')
+      <li>
+        <img src="${sitter.photo_url}">
+        <h3>Name: ${sitter.name} </h3>
+        <h3>Email: ${sitter.email} </h3>
+        <h3>Location: ${sitter.location} </h3>
+        <h3>Rate/hour: ${sitter.rate} </h3>
+        <h3>Pet Capacity: ${sitter.capacity} </h3>
+      </li>
+    `
+  }).join('')
 }
 
 function renderOwners(owners) {
   return owners.map((owner) => {
     return `
-    <li>
-            <h3>${owner.name} </h3>
-            <h3>${owner.email} </h3>
-            <h3>${owner.location} </h3>
-          </li>
-  `
+      <li>
+        <h3>${owner.name} </h3>
+        <h3>${owner.email} </h3>
+        <h3>${owner.location} </h3>
+      </li>
+    `
   }).join('')
 
 }
+
 function renderPets(pets) {
   return pets.map((pet) => {
     return `
-    <li>
-            <img src="${pet.photo_url}">
-            <h3>${pet.name} </h3>
-            <h3>${pet.age} </h3>
-            <h3>${pet.species} </h3>
-            <h2>${pet.temperament} </h2>
-            <h2>${pet.size} </h2>
+      <li>
+        <img src="${pet.photo_url}">
+        <h3>${pet.name}</h3>
+        <h3>${pet.age} </h3>
+        <h3>${pet.species} </h3>
+        <h2>${pet.temperament} </h2>
+        <h2>${pet.size} </h2>
+      </li>
+    `
+  }).join('')
+}
 
-          </li>
-  `
+function renderSitterDropdown(sitters) {
+  return sitters.map((sitter) => {
+    return `<option value=${sitter.id}>${sitter.name}</option>`
+  }).join('')
+}
+
+function renderPetDropdown(pets, currentUser) {
+  return pets.map((pet) => {
+    if (pet.id == currentUser.id) {
+      return `<option value=${pet.owner_id}>${pet.name}</option>`
+    }
   }).join('')
 }
