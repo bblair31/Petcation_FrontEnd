@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   let allOwners = []
   let allPets = []
   let allTransactions = []
-     const formHeader = document.getElementById('pet-form-header')
+  const formHeader = document.getElementById('pet-form-header')
   const sitterList = document.getElementById('sitter-list')
   const ownerList = document.getElementById('owner-list')
   const petList = document.getElementById('pet-list')
@@ -113,7 +113,6 @@ if(event.target.dataset.action === "create-new") {
       allPets.push(json)
       petForm.reset()
       let petSelectDropdown = document.getElementById('pet-select-dropdown')
-      // DEBUG: Not working to render dropdown list
       petSelectDropdown.innerHTML = renderPetDropdown(allPets, currentUser)
       petList.innerHTML = myPetsFilter(allPets)
          formHeader.innerText = "Add a New Pet!"
@@ -140,7 +139,6 @@ if(event.target.dataset.action === "create-new") {
      editedPet.photo_url = json.photo_url
       petForm.reset()
       let petSelectDropdown = document.getElementById('pet-select-dropdown')
-      // DEBUG: Not working to render dropdown list
       petSelectDropdown.innerHTML = renderPetDropdown(allPets, currentUser)
       petList.innerHTML = myPetsFilter(allPets)
       formHeader.innerText = "Add a New Pet!"
@@ -182,28 +180,44 @@ if(event.target.dataset.action === "create-new") {
       allTransactions.push(json)
 
       transactionTable.innerHTML += renderTransactions(allTransactions, currentUser)
-        transactionTable.scrollIntoView({behavior: "smooth"})
+      transactionTable.scrollIntoView({behavior: "smooth"})
+      transactionForm.reset()
 
     })
 
   }) // End of transactionForm Event Listener
 
-petList.addEventListener('click', (event) => {
-if(event.target.dataset.petid !== undefined) {
-   formHeader.innerText = "Edit This Pet!"
-  petForm.dataset.action = "edit-current"
-   let foundPet = findPet(event, allPets)
-   petForm.dataset.id = foundPet.id
-  petForm.querySelector('.pet-name').value = foundPet.name
-  petForm.querySelector('.pet-species').value = foundPet.species
-  petForm.querySelector('.pet-age').value = foundPet.age
-  petForm.querySelector('.pet-temperament').value = foundPet.temperament
-  petForm.querySelector('.pet-size').value = foundPet.size
-  petForm.querySelector('.pet-url').value = foundPet.photo_url
-  petForm.scrollIntoView({behavior: "smooth"})
- }
+  petList.addEventListener('click', (event) => {
+  if(event.target.dataset.petid !== undefined) {
+     formHeader.innerText = "Edit This Pet!"
+    petForm.dataset.action = "edit-current"
+     let foundPet = findPet(event, allPets)
+     petForm.dataset.id = foundPet.id
+    petForm.querySelector('.pet-name').value = foundPet.name
+    petForm.querySelector('.pet-species').value = foundPet.species
+    petForm.querySelector('.pet-age').value = foundPet.age
+    petForm.querySelector('.pet-temperament').value = foundPet.temperament
+    petForm.querySelector('.pet-size').value = foundPet.size
+    petForm.querySelector('.pet-url').value = foundPet.photo_url
+    petForm.scrollIntoView({behavior: "smooth"})
+   }
+  })
 
-})
+  transactionTable.addEventListener('click', (event) => {
+    if (event.target.name === "edit-reservation") {
+      let transactionId = event.target.parentElement.parentElement.dataset.transactionid
+      let foundTransaction = findTransaction(transactionId, allTransactions)
+      document.getElementById('sitter-select-dropdown').value = foundTransaction.sitter_id
+      document.getElementById('start-date').value = foundTransaction.start_date
+      document.getElementById('end-date').value = foundTransaction.end_date
+      document.getElementById('pet-select-dropdown').value = foundTransaction.pet_id
+      transactionForm.scrollIntoView({behavior: "smooth"})
+
+    } else if (event.target.name === "delete-reservation") {
+      let transactionId = event.target.parentElement.parentElement.dataset.transactionid
+      // // TODO: Keep Building this out
+    }
+  })
 
 
 
@@ -304,15 +318,21 @@ let filterTransactions = transactions.filter((transaction) =>{
   return transaction.pet.owner_id == currentUser.id
 })
  return filterTransactions.map((transaction) => {
- return  `
- <tr data-transactionid="${transaction.id}">
- <td>${transaction.pet_id}</td>
- <td>${transaction.sitter_id}</td>
- <td>${transaction.start_date}</td>
- <td>${transaction.end_date}</td>
- <td>${transaction.days_sat}</td>
- <td>${transaction.total_cost}</td>
- </tr>
- `
+   return  `
+   <tr data-transactionid="${transaction.id}">
+     <td>${transaction.pet.name}</td>
+     <td>${transaction.sitter.name}</td>
+     <td>${transaction.start_date}</td>
+     <td>${transaction.end_date}</td>
+     <td>${transaction.days_sat}</td>
+     <td>${transaction.total_cost}</td>
+     <td><button type="button" name="edit-reservation">Edit</button></td>
+     <td><button type="button" name="delete-reservation">Delete</button></td>
+   </tr>
+   `
 }).join('')
+}
+
+function findTransaction(transactionId, allTransactions) {
+  return allTransactions.find((transaction) => transaction.id == transactionId)
 }
