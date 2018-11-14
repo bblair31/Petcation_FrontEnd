@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const sitterList = document.getElementById('sitter-list')
   const ownerList = document.getElementById('owner-list')
   const petList = document.getElementById('pet-list')
-  const transactionList = document.getElementById('transaction-list')
+  const transactionTable = document.getElementById('transaction-table')
   const petForm = document.querySelector('.pet-form')
   const loginForm = document.querySelector('.login-form')
   const transactionForm = document.querySelector('.transaction-form')
@@ -43,10 +43,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
       allOwners.push(currentUser)
       petSelectDropdown.innerHTML = renderPetDropdown(allPets, currentUser)
       petList.innerHTML = myPetsFilter(allPets)
+      transactionTable.innerHTML += renderTransactions(allTransactions, currentUser, currentUser)
     })
 
     loginForm.style.display = 'none'
     hideContainer.style.display = 'block'
+
   }) // End of loginForm Listener
 
 
@@ -129,7 +131,7 @@ if(event.target.dataset.action === "create-new") {
      let editedPet = allPets.find((pet) => {
        return json.id == pet.id
      })
-     debugger;
+
      editedPet.name = json.name
      editedPet.age = json.age
      editedPet.temperament = json.temperament
@@ -178,7 +180,12 @@ if(event.target.dataset.action === "create-new") {
     .then(res =>  res.json())
     .then((json) => {
       allTransactions.push(json)
+
+      transactionTable.innerHTML += renderTransactions(allTransactions, currentUser)
+        transactionTable.scrollIntoView({behavior: "smooth"})
+
     })
+
   }) // End of transactionForm Event Listener
 
 petList.addEventListener('click', (event) => {
@@ -197,6 +204,8 @@ if(event.target.dataset.petid !== undefined) {
  }
 
 })
+
+
 
 }) // END DOMContentLoaded
 
@@ -273,7 +282,7 @@ function findSitter(transactionSitter, allSitters) {
 }
 
 function myPetsFilter(pets) {
-  const myPets = pets.filter((pet) => {
+    const myPets = pets.filter((pet) => {
   return pet.owner_id == currentUser.id
    })
    return myPets.map((pet) => {
@@ -282,11 +291,28 @@ function myPetsFilter(pets) {
      <img src="${pet.photo_url}" >
      <button data-petid="${pet.id}">Edit</button>
      `
-   }).join(' ')
+   }).join('')
 }
-
 function findPet(event, allPets) {
  return allPets.find((pet) => {
     return pet.id == event.target.dataset.petid
  })
+}
+
+function renderTransactions(transactions, currentUser) {
+let filterTransactions = transactions.filter((transaction) =>{
+  return transaction.pet.owner_id == currentUser.id
+})
+ return filterTransactions.map((transaction) => {
+ return  `
+ <tr data-transactionid="${transaction.id}">
+ <td>${transaction.pet_id}</td>
+ <td>${transaction.sitter_id}</td>
+ <td>${transaction.start_date}</td>
+ <td>${transaction.end_date}</td>
+ <td>${transaction.days_sat}</td>
+ <td>${transaction.total_cost}</td>
+ </tr>
+ `
+}).join('')
 }
