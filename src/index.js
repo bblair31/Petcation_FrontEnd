@@ -1,9 +1,9 @@
+let currentUser
 document.addEventListener('DOMContentLoaded', (event) => {
   let allSitters = []
   let allOwners = []
   let allPets = []
   let allTransactions = []
-  let currentUser
   const sitterList = document.getElementById('sitter-list')
   const ownerList = document.getElementById('owner-list')
   const petList = document.getElementById('pet-list')
@@ -48,8 +48,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     let petTemperament = petForm.querySelector('.pet-temperament').value
     let petSize = petForm.querySelector('.pet-size').value
     let petUrl = petForm.querySelector('.pet-url').value
+    debugger
     let data = {
-    owner_id: 1, //// NOTE: Add proper owner ID
+    owner_id: currentUser.id,
     name: petName,
     species: petSpecies,
     age: petAge,
@@ -67,7 +68,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     })
     .then(res => res.json())
     .then((json) => {
-      allPets.push(json) //// NOTE: Come back to Pet Display
+      allPets.push(json) 
       petForm.reset()
     })
   }) //End petForm Listener
