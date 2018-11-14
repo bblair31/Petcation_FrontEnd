@@ -10,6 +10,7 @@
     <div class="login-container">
       <form class="login-form" method="post">
         <h4>Please Login or Register</h4>
+        <p>If you are an existing User, just enter Email Address!</p>
         <input class="owner-name" type="text" name="Name" placeholder="name">
         <input  class="owner-email" type="email" name="Email" placeholder="email">
         <input class="owner-location" type="text" name="Location" placeholder="location">
@@ -20,15 +21,15 @@
 
     <div id="hidden-without-login" style="display: none;">
       <div class="pet-form-container">
-        <h2>Add a new Pet</h2>
-        <form class="pet-form" method="post">
+        <h2 id='pet-form-header'>Add a New Pet</h2>
+        <form class="pet-form" data-id="" data-action="create-new" method="post">
           <input class="pet-name" type="text" name="Name" placeholder="name">
           <input class="pet-species" type="text" name="Species" placeholder="species">
           <input class="pet-age" type="number" name="age" placeholder="age">
           <input class="pet-temperament" type="text" name="temperament"  placeholder="temperament">
           <input class="pet-size" type="text" name="size"  placeholder="size">
           <input class="pet-url" type="url" name="photo-url"  placeholder="photo-url">
-          <input type="submit" value="submit">
+          <input id="submit-button" type="submit" value="submit">
         </form>
       </div>
 
@@ -48,10 +49,10 @@
           <input type="submit" value="submit">
         </form>
       </div>
-
+<h2>Your Pets</h2>
+<div id='pet-list'></div>
       <ul id='sitter-list'></ul>
       <ul id='owner-list'></ul>
-      <ul id='pet-list'></ul>
       <ul id='transaction-list'></ul>
     </div>
 

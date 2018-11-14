@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   let allOwners = []
   let allPets = []
   let allTransactions = []
+     const formHeader = document.getElementById('pet-form-header')
   const sitterList = document.getElementById('sitter-list')
   const ownerList = document.getElementById('owner-list')
   const petList = document.getElementById('pet-list')
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       currentUser = json
       allOwners.push(currentUser)
       petSelectDropdown.innerHTML = renderPetDropdown(allPets, currentUser)
+      petList.innerHTML = myPetsFilter(allPets)
     })
 
     loginForm.style.display = 'none'
@@ -60,7 +62,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
   .then( res => res.json())
   .then( json => {
     allOwners = json
-    // ownerList.innerHTML = renderOwners(json)
+    // allPets = selectAllPets(json)
+
   })
 
   fetch('http://localhost:3000/api/v1/pets')
@@ -94,7 +97,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     size: petSize,
     photo_url: petUrl
     }
-
+  ;
+if(event.target.dataset.action === "create-new") {
     fetch('http://localhost:3000/api/v1/pets', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -109,7 +113,40 @@ document.addEventListener('DOMContentLoaded', (event) => {
       let petSelectDropdown = document.getElementById('pet-select-dropdown')
       // DEBUG: Not working to render dropdown list
       petSelectDropdown.innerHTML = renderPetDropdown(allPets, currentUser)
+      petList.innerHTML = myPetsFilter(allPets)
+         formHeader.innerText = "Add a New Pet!"
     })
+  } else if (event.target.dataset.action === "edit-current") {
+    fetch(`http://localhost:3000/api/v1/pets/${event.target.dataset.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => res.json())
+    .then((json) => {
+     let editedPet = allPets.find((pet) => {
+       return json.id == pet.id
+     })
+     debugger;
+     editedPet.name = json.name
+     editedPet.age = json.age
+     editedPet.temperament = json.temperament
+     editedPet.species = json.species
+     editedPet.size = json.size
+     editedPet.photo_url = json.photo_url
+      petForm.reset()
+      let petSelectDropdown = document.getElementById('pet-select-dropdown')
+      // DEBUG: Not working to render dropdown list
+      petSelectDropdown.innerHTML = renderPetDropdown(allPets, currentUser)
+      petList.innerHTML = myPetsFilter(allPets)
+      formHeader.innerText = "Add a New Pet!"
+
+
+    })
+  }
+
   }) //End petForm Listener
 
 
@@ -143,6 +180,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
       allTransactions.push(json)
     })
   }) // End of transactionForm Event Listener
+
+petList.addEventListener('click', (event) => {
+if(event.target.dataset.petid !== undefined) {
+   formHeader.innerText = "Edit This Pet!"
+  petForm.dataset.action = "edit-current"
+   let foundPet = findPet(event, allPets)
+   petForm.dataset.id = foundPet.id
+  petForm.querySelector('.pet-name').value = foundPet.name
+  petForm.querySelector('.pet-species').value = foundPet.species
+  petForm.querySelector('.pet-age').value = foundPet.age
+  petForm.querySelector('.pet-temperament').value = foundPet.temperament
+  petForm.querySelector('.pet-size').value = foundPet.size
+  petForm.querySelector('.pet-url').value = foundPet.photo_url
+  petForm.scrollIntoView({behavior: "smooth"})
+ }
+
+})
 
 }) // END DOMContentLoaded
 
@@ -216,4 +270,23 @@ function calculateCost(daysSat, transactionSitterObject) {
 
 function findSitter(transactionSitter, allSitters) {
   return allSitters.find(sitter => sitter.id == transactionSitter)
+}
+
+function myPetsFilter(pets) {
+  const myPets = pets.filter((pet) => {
+  return pet.owner_id == currentUser.id
+   })
+   return myPets.map((pet) => {
+    return  `
+     <li>${pet.name}</li>
+     <img src="${pet.photo_url}" >
+     <button data-petid="${pet.id}">Edit</button>
+     `
+   }).join(' ')
+}
+
+function findPet(event, allPets) {
+ return allPets.find((pet) => {
+    return pet.id == event.target.dataset.petid
+ })
 }
