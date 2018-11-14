@@ -7,14 +7,16 @@
     <script src="src/index.js" charset="utf-8"></script>
   </head>
   <body>
-    <form class="login-form" method="post">
-      <input class="owner-name" type="text" name="Name" placeholder="name">
-      <input  class="owner-email" type="email" name="Email" placeholder="email">
-      <input class="owner-location" type="text" name="Location" placeholder="location">
-      <input type="submit" value="submit">
-    </form>
-    <br>
-    <br>
+    <div class="login-container">
+      <h4>Please Login or Register</h4>
+      <form class="login-form" method="post">
+        <input class="owner-name" type="text" name="Name" placeholder="name">
+        <input  class="owner-email" type="email" name="Email" placeholder="email">
+        <input class="owner-location" type="text" name="Location" placeholder="location">
+        <input type="submit" value="submit">
+      </form>
+    </div>
+
 
     <div id="hidden-without-login" style="display: none;">
       <form class="pet-form" method="post">
