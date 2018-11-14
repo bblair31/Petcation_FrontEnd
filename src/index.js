@@ -115,18 +115,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
   transactionForm.addEventListener('submit', (event) => {
     event.preventDefault();
-    let transactionPet = transactionForm.querySelector('.pick-pet').value
+    let transactionPet = transactionForm.querySelector('#pet-select-dropdown').value
     let startDate = transactionForm.querySelector('.start-date').value
     let endDate = transactionForm.querySelector('.end-date').value
-    let transactionSitter = transactionForm.querySelector('.pick-sitter').value
-
+    let transactionSitter = transactionForm.querySelector('#sitter-select-dropdown').value
+    let transactionSitterObject = findSitter(transactionSitter, allSitters)
+    let daysSat = calculateDaysSat(startDate, endDate)
+    let totalCost =  calculateCost(daysSat, transactionSitterObject)
     let transactionData = {
-    sitter_id: 1,
-    pet_id: 5,
+    sitter_id: transactionSitter,
+    pet_id: transactionPet,
     start_date: startDate,
     end_date: endDate,
-    days_sat: 2,
-    total_cost: 150
+    days_sat: daysSat,
+    total_cost: totalCost
     }
 
     fetch('http://localhost:3000/api/v1/transactions', {
@@ -196,8 +198,22 @@ function renderSitterDropdown(sitters) {
 
 function renderPetDropdown(pets, currentUser) {
   return pets.map((pet) => {
-    if (pet.id == currentUser.id) {
-      return `<option value=${pet.owner_id}>${pet.name}</option>`
+    if (pet.owner_id == currentUser.id) {
+      return `<option value=${pet.id}>${pet.name}</option>`
     }
   }).join('')
+}
+
+function calculateDaysSat(startDate, endDate){
+  const msPerDay = 1000 * 60 * 60 * 24;
+  return Math.floor(((new Date(endDate)  - new Date(startDate)) / msPerDay))
+}
+
+function calculateCost(daysSat, transactionSitterObject) {
+  let rate = parseInt(transactionSitterObject.rate)
+  return daysSat * rate
+}
+
+function findSitter(transactionSitter, allSitters) {
+  return allSitters.find(sitter => sitter.id == transactionSitter)
 }
