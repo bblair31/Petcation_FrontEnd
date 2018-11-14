@@ -60,8 +60,8 @@ size: petSize,
 photo_url: petUrl
 }
 fetch('http://localhost:3000/api/v1/pets', {
-  method: 'POST', // or 'PUT'
-  body: JSON.stringify(data), // data can be `string` or {object}!
+  method: 'POST',
+  body: JSON.stringify(data),
   headers:{
     'Content-Type': 'application/json'
   }
@@ -77,7 +77,6 @@ petForm.reset()
 
 loginForm.addEventListener('submit', (event) => {
     event.preventDefault();
-    console.log(event);
 let ownerName = loginForm.querySelector('.owner-name').value
 let ownerEmail = loginForm.querySelector('.owner-email').value
 let ownerLocation = loginForm.querySelector('.owner-location').value
@@ -88,17 +87,21 @@ email: ownerEmail,
 location: ownerLocation,
 }
 fetch('http://localhost:3000/api/v1/owners', {
-  method: 'POST', // or 'PUT'
-  body: JSON.stringify(ownerData), // data can be `string` or {object}!
+  method: 'POST',
+  body: JSON.stringify(ownerData),
   headers:{
     'Content-Type': 'application/json'
   }
 }).then(res => res.json())
 .then((json) => {
 currentUser = json
+debugger
 allOwners.push(currentUser)
 })
-
+loginForm.reset()
+loginForm.style.display = 'none'
+petForm.style.display = 'block'
+transactionForm.style.display = 'block'
 
 })
 
@@ -108,7 +111,7 @@ let transactionPet = transactionForm.querySelector('.pick-pet').value
 let startDate = transactionForm.querySelector('.start-date').value
 let endDate = transactionForm.querySelector('.end-date').value
 let transactionSitter = transactionForm.querySelector('.pick-sitter').value
-// debugger;
+
 let transactionData = {
 sitter_id: 1,
 pet_id: 5,
@@ -127,7 +130,6 @@ fetch('http://localhost:3000/api/v1/transactions', {
 }).then(res =>  res.json())
 .then((json) => {
 allTransactions.push(json)
-console.log(json);
 })
 
 
