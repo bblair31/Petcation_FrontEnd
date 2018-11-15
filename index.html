@@ -18,7 +18,7 @@
   <div class="navbar-fixed">
     <nav>
       <div class="nav-wrapper">
-        <a href="#top" class="brand-logo"><img src="https://www.littlehotelier.com/wp-content/uploads/2015/10/pet-friendly-hotels-bed-and-breakfast.jpg" style="width:95px;height:60px;">PetCation</a>
+        <a href="#top" class="brand-logo"><img src="https://www.littlehotelier.com/wp-content/uploads/2015/10/pet-friendly-hotels-bed-and-breakfast.jpg" class="circle" style="width:95px;height:60px;">PetCation</a>
         <ul class="right hide-on-med-and-down">
           <li><a href="#pet-form-container">Add a Pet</a></li>
           <li><a href="#pet-list">My Pets</a></li>
@@ -62,27 +62,28 @@
 
       <br>
 
-<h2>Your Pets</h2>
-<div style="display: inline-block" class="row" id='pet-list'></div>
+  <h2>Your Pets</h2>
+  <div class="cats-grid-container" id='pet-list'>
+  </div>
 
-<div id="transaction-form-container" class="transaction-form-container">
-  <form class="transaction-form" data-action="new-transaction" data-transactionid="">
-    <h2 id="transaction-header">New Sitter Reservation</h2>
-    <select class="browser-default" id="sitter-select-dropdown" name="sitter">
-        <option value="" disabled selected>Choose your Sitter</option>
-      <!-- Insert all sitters here  -->
-    </select>
-    <h4>Start Date</h4>
-    <input id="start-date" class="datepicker" type="date" name="start" placeholder="start-date">
-    <h4>End Date</h4>
-    <input id="end-date" class="datepicker" type="date" name="end" placeholder="end-date">
-    <select class="browser-default" id="pet-select-dropdown">
-         <option value="" disabled selected>Choose your Pet</option>
-      <!-- Insert currentUser's pets here  -->
-    </select>
-    <input class="btn" type="submit" value="submit">
-  </form>
-</div>
+  <div id="transaction-form-container" class="transaction-form-container">
+    <form class="transaction-form" data-action="new-transaction" data-transactionid="">
+      <h2 id="transaction-header">New Sitter Reservation</h2>
+      <select class="browser-default" id="sitter-select-dropdown" name="sitter">
+          <option value="" disabled selected>Choose your Sitter</option>
+        <!-- Insert all sitters here  -->
+      </select>
+      <h4>Start Date</h4>
+      <input id="start-date" class="datepicker" type="date" name="start" placeholder="start-date">
+      <h4>End Date</h4>
+      <input id="end-date" class="datepicker" type="date" name="end" placeholder="end-date">
+      <select class="browser-default" id="pet-select-dropdown">
+           <option value="" disabled selected>Choose your Pet</option>
+        <!-- Insert currentUser's pets here  -->
+      </select>
+      <input class="btn" type="submit" value="submit">
+    </form>
+  </div>
 
 <h2>Browse Sitters... </h2>
       <div class="grid-container" id='sitter-list'></div>
