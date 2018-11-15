@@ -266,7 +266,7 @@ function renderSitters(sitters) {
   return sitters.map((sitter) => {
     return `
     <div class="col s3">
-        <img class="circle" src="${sitter.photo_url}">
+        <img class="circle z-depth-3" src="${sitter.photo_url}">
         <p>Name: ${sitter.name} </p>
         <p>Email: ${sitter.email} </p>
         <p>Location: ${sitter.location} </p>
@@ -339,9 +339,11 @@ function myPetsFilter(pets) {
    })
    return myPets.map((pet) => {
     return  `
-     <li>${pet.name}</li>
-     <img src="${pet.photo_url}" >
+     <div class="col s6">
+     <p<${pet.name}</p>
+     <img class="z-depth-5" src="${pet.photo_url}" ><br>
      <button class="btn" data-petid="${pet.id}">Edit</button>
+     </div>
      `
    }).join('')
 }
