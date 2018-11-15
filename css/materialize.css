@@ -13,6 +13,12 @@
   justify-content: space-evenly;
 }
 
+.cats-grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: space-evenly;
+}
+
  .login-form, .pet-form-container, .transaction-form  {
    background-color: #bcbcbc;
    border-style: solid;

@@ -211,19 +211,33 @@ document.addEventListener('DOMContentLoaded', (event) => {
   }) // End of transactionForm Event Listener
 
   petList.addEventListener('click', (event) => {
-  if(event.target.dataset.petid !== undefined) {
-     formHeader.innerText = "Edit This Pet!"
-    petForm.dataset.action = "edit-current"
-     let foundPet = findPet(event, allPets)
-     petForm.dataset.id = foundPet.id
-    petForm.querySelector('.pet-name').value = foundPet.name
-    petForm.querySelector('.pet-species').value = foundPet.species
-    petForm.querySelector('.pet-age').value = foundPet.age
-    petForm.querySelector('.pet-temperament').value = foundPet.temperament
-    petForm.querySelector('.pet-size').value = foundPet.size
-    petForm.querySelector('.pet-url').value = foundPet.photo_url
-    petForm.scrollIntoView({behavior: "smooth"})
-   }
+    if(event.target.name === "edit-pet") {
+       formHeader.innerText = "Edit This Pet!"
+      petForm.dataset.action = "edit-current"
+       let foundPet = findPet(event, allPets)
+       petForm.dataset.id = foundPet.id
+      petForm.querySelector('.pet-name').value = foundPet.name
+      petForm.querySelector('.pet-species').value = foundPet.species
+      petForm.querySelector('.pet-age').value = foundPet.age
+      petForm.querySelector('.pet-temperament').value = foundPet.temperament
+      petForm.querySelector('.pet-size').value = foundPet.size
+      petForm.querySelector('.pet-url').value = foundPet.photo_url
+      petForm.scrollIntoView({behavior: "smooth"})
+    } else if (event.target.name === "delete-pet") {
+        let petId = event.target.dataset.petid
+        let card = event.target.parentElement
+        fetch(`http://localhost:3000/api/v1/pets/${petId}`,
+          {
+           method: 'DELETE'
+         }
+       )
+         .then(response => {
+           if (response.ok) {
+             allPets= allPets.filter(pet => pet.id != petId)
+            card.remove()
+           }
+         })
+    }
   })
 
   transactionTable.addEventListener('click', (event) => {
@@ -293,7 +307,7 @@ function renderSitters(sitters) {
 function renderPets(pets) {
   return pets.map((pet) => {
     return `
-      <div class="col s3">
+      <div class="col s6">
         <img src="${pet.photo_url}">
         <h3>${pet.name}</h3>
         <h3>${pet.age} </h3>
@@ -340,9 +354,10 @@ function myPetsFilter(pets) {
    return myPets.map((pet) => {
     return  `
      <div class="col s6">
-     <p>${pet.name}</p>
-     <img class="z-depth-5" src="${pet.photo_url}" ><br>
-     <button class="btn" data-petid="${pet.id}">Edit</button>
+       <p>${pet.name}</p>
+       <img class="z-depth-5 circle" src="${pet.photo_url}" width="200" height="200"><br>
+       <button class="btn" name="edit-pet" data-petid="${pet.id}">Edit</button>
+       <button class="btn" name="delete-pet" data-petid="${pet.id}">Delete 😿</button>
      </div>
      `
    }).join('')
