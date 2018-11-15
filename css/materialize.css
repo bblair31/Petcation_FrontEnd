@@ -17,6 +17,11 @@
   display: grid;
   grid-template-columns: auto auto auto;
   justify-content: space-evenly;
+  margin-top: 75px;
+}
+
+.login-form{
+  margin-top: 50px;
 }
 
  .login-form, .pet-form-container, .transaction-form  {
@@ -24,6 +29,7 @@
    border-style: solid;
    border-color: #51bcad;
    color: #4158a9;
+   margin-top: 75px;
  }
 
 .browser-default {
