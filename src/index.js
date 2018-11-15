@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   let allTransactions = []
   const formHeader = document.getElementById('pet-form-header')
   const sitterList = document.getElementById('sitter-list')
-  const ownerList = document.getElementById('owner-list')
   const petList = document.getElementById('pet-list')
   const transactionTable = document.getElementById('transaction-table')
   const petForm = document.querySelector('.pet-form')
@@ -266,30 +265,30 @@ if(event.target.dataset.action === "create-new") {
 function renderSitters(sitters) {
   return sitters.map((sitter) => {
     return `
-      <li>
-        <img src="${sitter.photo_url}">
-        <h3>Name: ${sitter.name} </h3>
-        <h3>Email: ${sitter.email} </h3>
-        <h3>Location: ${sitter.location} </h3>
-        <h3>Rate/hour: ${sitter.rate} </h3>
-        <h3>Pet Capacity: ${sitter.capacity} </h3>
-      </li>
+    <div class="col s3">
+        <img class="circle" src="${sitter.photo_url}">
+        <p>Name: ${sitter.name} </p>
+        <p>Email: ${sitter.email} </p>
+        <p>Location: ${sitter.location} </p>
+        <p>Rate/hour: ${sitter.rate} </p>
+        <p>Pet Capacity: ${sitter.capacity} </p>
+      </div>
     `
   }).join('')
 }
 
-function renderOwners(owners) {
-  return owners.map((owner) => {
-    return `
-      <li>
-        <h3>${owner.name} </h3>
-        <h3>${owner.email} </h3>
-        <h3>${owner.location} </h3>
-      </li>
-    `
-  }).join('')
-
-}
+// function renderOwners(owners) {
+//   return owners.map((owner) => {
+//     return `
+//       <li>
+//         <h3>${owner.name} </h3>
+//         <h3>${owner.email} </h3>
+//         <h3>${owner.location} </h3>
+//       </li>
+//     `
+//   }).join('')
+//
+// }
 
 function renderPets(pets) {
   return pets.map((pet) => {
