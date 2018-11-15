@@ -340,7 +340,7 @@ function myPetsFilter(pets) {
    return myPets.map((pet) => {
     return  `
      <div class="col s6">
-     <p<${pet.name}</p>
+     <p>${pet.name}</p>
      <img class="z-depth-5" src="${pet.photo_url}" ><br>
      <button class="btn" data-petid="${pet.id}">Edit</button>
      </div>
