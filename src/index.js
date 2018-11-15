@@ -98,37 +98,36 @@ document.addEventListener('DOMContentLoaded', (event) => {
     size: petSize,
     photo_url: petUrl
     }
-  ;
-if(event.target.dataset.action === "create-new") {
-    fetch('http://localhost:3000/api/v1/pets', {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers:{
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(res => res.json())
-    .then((json) => {
-      allPets.push(json)
-      petForm.reset()
-      let petSelectDropdown = document.getElementById('pet-select-dropdown')
-      petSelectDropdown.innerHTML = renderPetDropdown(allPets, currentUser)
-      petList.innerHTML = myPetsFilter(allPets)
-         formHeader.innerText = "Add a New Pet!"
-    })
-  } else if (event.target.dataset.action === "edit-current") {
-    fetch(`http://localhost:3000/api/v1/pets/${event.target.dataset.id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(res => res.json())
-    .then((json) => {
-     let editedPet = allPets.find((pet) => {
-       return json.id == pet.id
-     })
+    if(event.target.dataset.action === "create-new") {
+        fetch('http://localhost:3000/api/v1/pets', {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers:{
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(res => res.json())
+        .then((json) => {
+          allPets.push(json)
+          petForm.reset()
+          let petSelectDropdown = document.getElementById('pet-select-dropdown')
+          petSelectDropdown.innerHTML = renderPetDropdown(allPets, currentUser)
+          petList.innerHTML = myPetsFilter(allPets)
+             formHeader.innerText = "Add a New Pet!"
+        })
+    } else if (event.target.dataset.action === "edit-current") {
+      fetch(`http://localhost:3000/api/v1/pets/${event.target.dataset.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res => res.json())
+      .then((json) => {
+       let editedPet = allPets.find((pet) => {
+         return json.id == pet.id
+       })
 
      editedPet.name = json.name
      editedPet.age = json.age
@@ -176,7 +175,7 @@ if(event.target.dataset.action === "create-new") {
       .then(res =>  res.json())
       .then((json) => {
         allTransactions.push(json)
-        transactionTable.innerHTML += renderTransactions(allTransactions, currentUser)
+        transactionTable.innerHTML += renderSingleTransaction(json, currentUser)
         transactionTable.scrollIntoView({behavior: "smooth"})
         transactionForm.reset()
 
@@ -230,6 +229,7 @@ if(event.target.dataset.action === "create-new") {
   transactionTable.addEventListener('click', (event) => {
     if (event.target.name === "edit-reservation") {
       let transactionId = event.target.parentElement.parentElement.dataset.transactionid
+      debugger
       let foundTransaction = findTransaction(transactionId, allTransactions)
       document.getElementById('sitter-select-dropdown').value = foundTransaction.sitter_id
       document.getElementById('start-date').value = foundTransaction.start_date
@@ -377,6 +377,7 @@ function findTransaction(transactionId, allTransactions) {
 
 function renderSingleTransaction(transaction) {
   return  `
+  <tr data-transactionid="${transaction.id}">
     <td>${transaction.pet.name}</td>
     <td>${transaction.sitter.name}</td>
     <td>${transaction.start_date}</td>
@@ -385,5 +386,6 @@ function renderSingleTransaction(transaction) {
     <td>${transaction.total_cost}</td>
     <td><button class="btn" type="button" name="edit-reservation">Edit</button></td>
     <td><button class="btn" type="button" name="delete-reservation">Delete</button></td>
+   </tr>
   `
 }
