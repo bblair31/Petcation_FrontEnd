@@ -341,7 +341,7 @@ function myPetsFilter(pets) {
     return  `
      <li>${pet.name}</li>
      <img src="${pet.photo_url}" >
-     <button data-petid="${pet.id}">Edit</button>
+     <button class="btn" data-petid="${pet.id}">Edit</button>
      `
    }).join('')
 }
@@ -364,8 +364,8 @@ let filterTransactions = transactions.filter((transaction) =>{
      <td>${transaction.end_date}</td>
      <td>${transaction.days_sat}</td>
      <td>${transaction.total_cost}</td>
-     <td><button type="button" name="edit-reservation">Edit</button></td>
-     <td><button type="button" name="delete-reservation">Delete</button></td>
+     <td><button class="btn" type="button" name="edit-reservation">Edit</button></td>
+     <td><button class="btn" type="button" name="delete-reservation">Delete</button></td>
    </tr>
    `
 }).join('')
@@ -383,7 +383,7 @@ function renderSingleTransaction(transaction) {
     <td>${transaction.end_date}</td>
     <td>${transaction.days_sat}</td>
     <td>${transaction.total_cost}</td>
-    <td><button type="button" name="edit-reservation">Edit</button></td>
-    <td><button type="button" name="delete-reservation">Delete</button></td>
+    <td><button class="btn" type="button" name="edit-reservation">Edit</button></td>
+    <td><button class="btn" type="button" name="delete-reservation">Delete</button></td>
   `
 }
