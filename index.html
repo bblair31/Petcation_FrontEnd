@@ -14,12 +14,15 @@
     <script src="src/index.js" charset="utf-8"></script>
   </head>
   <body>
-    <div class="login-container">
+    <div class="container login-container">
       <form class="login-form" method="post">
         <h4>Please Login or Register</h4>
         <p>If you are an existing User, just enter Email Address!</p>
-        <input class="owner-name" type="text" name="Name" placeholder="name">
-        <input  class="owner-email" type="email" name="Email" placeholder="email">
+        <i class="material-icons prefix">account_circle</i>
+        <input class="owner-name" type="text" name="Name" placeholder="name"><br><br>
+        <i class="material-icons prefix">email</i>
+        <input  class="owner-email validate" type="email" name="Email" placeholder="email"><br><br>
+        <i class="material-icons prefix">location_city</i>
         <input class="owner-location" type="text" name="Location" placeholder="location">
         <input type="submit" value="submit">
       </form>
@@ -53,9 +56,9 @@
       <!-- Insert all sitters here  -->
     </select>
     <h4>Start Date</h4>
-    <input id="start-date" type="date" name="start" placeholder="start-date">
+    <input id="start-date" class="datepicker" type="date" name="start" placeholder="start-date">
     <h4>End Date</h4>
-    <input id="end-date" type="date" name="end" placeholder="end-date">
+    <input id="end-date" class="datepicker" type="date" name="end" placeholder="end-date">
     <select class="browser-default" id="pet-select-dropdown">
          <option value="" disabled selected>Choose your Pet</option>
       <!-- Insert currentUser's pets here  -->
