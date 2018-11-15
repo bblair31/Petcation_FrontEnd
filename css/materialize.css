@@ -7,6 +7,12 @@
     background-color: #f7f7f7;
 }
 
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  justify-content: space-evenly;
+}
+
  .login-form, .pet-form-container, .transaction-form  {
    background-color: #bcbcbc;
    border-style: solid;
