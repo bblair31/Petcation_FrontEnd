@@ -135,11 +135,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
      editedPet.species = json.species
      editedPet.size = json.size
      editedPet.photo_url = json.photo_url
-      petForm.reset()
-      let petSelectDropdown = document.getElementById('pet-select-dropdown')
-      petSelectDropdown.innerHTML = renderPetDropdown(allPets, currentUser)
-      petList.innerHTML = myPetsFilter(allPets)
-      formHeader.innerText = "Add a New Pet!"
+    petForm.reset()
+    let petSelectDropdown = document.getElementById('pet-select-dropdown')
+    petSelectDropdown.innerHTML = renderPetDropdown(allPets, currentUser)
+    petList.innerHTML = myPetsFilter(allPets)
+    formHeader.innerText = "Add a New Pet!"
+    petList.scrollIntoView({behavior: "smooth"})
     })
   }
 
