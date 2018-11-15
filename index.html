@@ -14,6 +14,23 @@
     <script src="src/index.js" charset="utf-8"></script>
   </head>
   <body>
+
+  <div class="navbar-fixed">
+    <nav>
+      <div class="nav-wrapper">
+        <a href="#top" class="brand-logo">PetCation</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="#pet-form-container">Add a Pet</a></li>
+          <li><a href="#pet-list">My Pets</a></li>
+          <li><a href="#transaction-form-container">Get A Pet Sitter</a></li>
+          <li><a href="#sitter-list">Sitters</a></li>
+          <li><a href="#transaction-table">My Transactions</a></li>
+          <li><a href="javascript:window.location.reload(true)">Logout</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
     <div class="container login-container">
       <form class="login-form" method="post">
         <h4>Please Login or Register</h4>
@@ -24,13 +41,13 @@
         <input  class="owner-email validate" type="email" name="Email" placeholder="email"><br><br>
         <i class="material-icons prefix">location_city</i>
         <input class="owner-location" type="text" name="Location" placeholder="location">
-        <input type="submit" value="submit">
+        <input class="btn"type="submit" value="submit">
       </form>
     </div>
 
 
     <div class="container" id="hidden-without-login" style="display: none;">
-      <div class="pet-form-container">
+      <div id="pet-form-container" class="pet-form-container">
         <h2 id='pet-form-header'>Add a New Pet</h2>
         <form class="pet-form" data-id="" data-action="create-new" method="post">
           <input class="pet-name" type="text" name="Name" placeholder="name">
@@ -39,7 +56,7 @@
           <input class="pet-temperament" type="text" name="temperament"  placeholder="temperament">
           <input class="pet-size" type="text" name="size"  placeholder="size">
           <input class="pet-url" type="url" name="photo-url"  placeholder="photo-url">
-          <input id="submit-button" type="submit" value="submit">
+          <input id="submit-button" class="btn" type="submit" value="submit">
         </form>
       </div>
 
@@ -48,10 +65,10 @@
 <h2>Your Pets</h2>
 <div id='pet-list'></div>
 
-<div class="transaction-form-container">
+<div id="transaction-form-container" class="transaction-form-container">
   <form class="transaction-form" data-action="new-transaction" data-transactionid="">
     <h2 id="transaction-header">New Sitter Reservation</h2>
-    <select  class="browser-default" id="sitter-select-dropdown" name="sitter">
+    <select class="browser-default" id="sitter-select-dropdown" name="sitter">
         <option value="" disabled selected>Choose your Sitter</option>
       <!-- Insert all sitters here  -->
     </select>
@@ -63,13 +80,13 @@
          <option value="" disabled selected>Choose your Pet</option>
       <!-- Insert currentUser's pets here  -->
     </select>
-    <input type="submit" value="submit">
+    <input class="btn" type="submit" value="submit">
   </form>
 </div>
       <div class="row" id='sitter-list'></div>
 
       <h2>Your Reservations</h2>
-      <table class="highlight" id='transaction-table'>
+      <table class="highlight blue lighten-5" id='transaction-table'>
             <tr>
               <th>Pet Name</th>
               <th>Sitter Name</th>
