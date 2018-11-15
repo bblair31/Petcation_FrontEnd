@@ -293,14 +293,14 @@ function renderSitters(sitters) {
 function renderPets(pets) {
   return pets.map((pet) => {
     return `
-      <li>
+      <div class="col s3">
         <img src="${pet.photo_url}">
         <h3>${pet.name}</h3>
         <h3>${pet.age} </h3>
         <h3>${pet.species} </h3>
         <h2>${pet.temperament} </h2>
         <h2>${pet.size} </h2>
-      </li>
+      </div>
     `
   }).join('')
 }
