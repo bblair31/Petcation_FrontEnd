@@ -36,8 +36,8 @@
       <br>
 
       <div class="transaction-form-container">
-        <form class="transaction-form" method="post">
-          <h2>Hire a Sitter</h2>
+        <form class="transaction-form" data-action="new-transaction" data-transactionid="">
+          <h2 id="transaction-header">New Sitter Reservation</h2>
           <select id="sitter-select-dropdown" name="sitter">
             <!-- Insert all sitters here  -->
           </select>
@@ -58,14 +58,15 @@
 
       <h2>Your Reservations</h2>
       <table id='transaction-table'>
-        <tr>
-          <th>Pet Name</th>
-          <th>Sitter Name</th>
-          <th>Start Date</th>
-          <th>End Date</th>
-          <th>Total Days Sat</th>
-          <th>Total Cost</th>
-        </tr>
+            <tr>
+              <th>Pet Name</th>
+              <th>Sitter Name</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Total Days Sat</th>
+              <th>Total Cost</th>
+            </tr>
+      </table>
     </div>
 
   </body>

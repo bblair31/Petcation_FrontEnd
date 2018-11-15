@@ -142,8 +142,6 @@ if(event.target.dataset.action === "create-new") {
       petSelectDropdown.innerHTML = renderPetDropdown(allPets, currentUser)
       petList.innerHTML = myPetsFilter(allPets)
       formHeader.innerText = "Add a New Pet!"
-
-
     })
   }
 
@@ -153,8 +151,8 @@ if(event.target.dataset.action === "create-new") {
   transactionForm.addEventListener('submit', (event) => {
     event.preventDefault();
     let transactionPet = transactionForm.querySelector('#pet-select-dropdown').value
-    let startDate = transactionForm.querySelector('.start-date').value
-    let endDate = transactionForm.querySelector('.end-date').value
+    let startDate = transactionForm.querySelector('#start-date').value
+    let endDate = transactionForm.querySelector('#end-date').value
     let transactionSitter = transactionForm.querySelector('#sitter-select-dropdown').value
     let transactionSitterObject = findSitter(transactionSitter, allSitters)
     let daysSat = calculateDaysSat(startDate, endDate)
@@ -168,22 +166,49 @@ if(event.target.dataset.action === "create-new") {
     total_cost: totalCost
     }
 
-    fetch('http://localhost:3000/api/v1/transactions', {
-      method: 'POST',
-      body: JSON.stringify(transactionData), // data can be `string` or {object}!
-      headers:{
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(res =>  res.json())
-    .then((json) => {
-      allTransactions.push(json)
+    if (event.target.dataset.action === "new-transaction") {
+      fetch('http://localhost:3000/api/v1/transactions', {
+        method: 'POST',
+        body: JSON.stringify(transactionData),
+        headers:{
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res =>  res.json())
+      .then((json) => {
+        allTransactions.push(json)
+        transactionTable.innerHTML += renderTransactions(allTransactions, currentUser)
+        transactionTable.scrollIntoView({behavior: "smooth"})
+        transactionForm.reset()
 
-      transactionTable.innerHTML += renderTransactions(allTransactions, currentUser)
-      transactionTable.scrollIntoView({behavior: "smooth"})
-      transactionForm.reset()
-
-    })
+      })
+    } else if (event.target.dataset.action === "edit-transaction") {
+        let foundTransaction = findTransaction(event.target.dataset.transactionid, allTransactions)
+        transactionData.id = foundTransaction.id
+        fetch(`http://localhost:3000/api/v1/transactions/${foundTransaction.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify(transactionData),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(res => res.json())
+        .then((json) => {
+          foundTransaction.sitter_id = json.sitter_id
+          foundTransaction.pet_id = json.pet_id
+          foundTransaction.days_sat = json.days_sat
+          foundTransaction.total_cost = json.total_cost
+          foundTransaction.start_date = json.start_date
+          foundTransaction.end_date = json.end_date
+          let editedRow = transactionTable.querySelector(`[data-transactionid="${foundTransaction.id}"]`)
+          editedRow.innerHTML = renderSingleTransaction(json)
+         })
+         transactionForm.reset()
+         let sitterSelectDropdown = document.getElementById("sitter-select-dropdown")
+         sitterSelectDropdown.innerHTML = renderSitterDropdown(allSitters)
+         transactionTable.scrollIntoView({behavior: "smooth"})
+         transactionForm.querySelector("#transaction-header").innerText = "New Sitter Reservation"
+    }
 
   }) // End of transactionForm Event Listener
 
@@ -211,13 +236,27 @@ if(event.target.dataset.action === "create-new") {
       document.getElementById('start-date').value = foundTransaction.start_date
       document.getElementById('end-date').value = foundTransaction.end_date
       document.getElementById('pet-select-dropdown').value = foundTransaction.pet_id
+      transactionForm.dataset.action = "edit-transaction"
+      transactionForm.querySelector("#transaction-header").innerText = "Edit this Sitter Reservation"
+      transactionForm.dataset.transactionid = transactionId
       transactionForm.scrollIntoView({behavior: "smooth"})
 
     } else if (event.target.name === "delete-reservation") {
       let transactionId = event.target.parentElement.parentElement.dataset.transactionid
-      // // TODO: Keep Building this out
-    }
-  })
+      let row = event.target.parentElement.parentElement
+      fetch(`http://localhost:3000/api/v1/transactions/${transactionId}`,
+        {
+         method: 'DELETE'
+       }
+     )
+       .then(response => {
+         if (response.ok) {
+           allTransactions = allTransactions.filter(transaction => transaction.id != transactionId)
+          row.remove()
+         }
+       })
+      }
+  }) // End of TransactionTable Listener
 
 
 
@@ -335,4 +374,17 @@ let filterTransactions = transactions.filter((transaction) =>{
 
 function findTransaction(transactionId, allTransactions) {
   return allTransactions.find((transaction) => transaction.id == transactionId)
+}
+
+function renderSingleTransaction(transaction) {
+  return  `
+    <td>${transaction.pet.name}</td>
+    <td>${transaction.sitter.name}</td>
+    <td>${transaction.start_date}</td>
+    <td>${transaction.end_date}</td>
+    <td>${transaction.days_sat}</td>
+    <td>${transaction.total_cost}</td>
+    <td><button type="button" name="edit-reservation">Edit</button></td>
+    <td><button type="button" name="delete-reservation">Delete</button></td>
+  `
 }
