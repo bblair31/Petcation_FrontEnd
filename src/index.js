@@ -267,7 +267,7 @@ function renderSitters(sitters) {
     return `
     <div class="col s3">
         <img class="circle z-depth-3" src="${sitter.photo_url}">
-        <p>Name: ${sitter.name} </p>
+        <p>${sitter.name} </p>
         <p>Email: ${sitter.email} </p>
         <p>Location: ${sitter.location} </p>
         <p>Rate/hour: ${sitter.rate} </p>
