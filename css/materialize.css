@@ -7,6 +7,15 @@
     background-color: #f7f7f7;
 }
 
+.welcome-container {
+  margin: 0 auto;
+  max-width: 1280px;
+  width: 70%;
+  text-align: center;
+  margin-bottom: 40px;
+  margin-top: 50px;
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: auto auto auto auto;
@@ -35,6 +44,14 @@
 .browser-default {
   background-color: #e2e4f3;
 }
+
+.brand-font {
+  text-align: right;
+  text-shadow: 1px 1.5px #4158a9;
+  font-style: italic;
+  font-weight: bold;
+}
+
 
 
 
@@ -3465,6 +3482,7 @@ table span.badge {
   margin: 0 auto;
   max-width: 1280px;
   width: 90%;
+  margin-bottom: 40px;
 }
 
 @media only screen and (min-width: 601px) {
@@ -4365,8 +4383,11 @@ nav .brand-logo {
   position: absolute;
   color: #fff;
   display: inline-block;
-  font-size: 2.1rem;
+  font-size: 3.0rem;
   padding: 0;
+  text-indent: 10px;
+  vertical-align: text-top;
+}
 }
 
 nav .brand-logo.center {

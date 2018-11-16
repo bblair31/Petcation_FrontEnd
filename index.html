@@ -10,25 +10,29 @@
 <!--Let browser know website is optimized for mobile-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta charset="utf-8">
+    <link rel="icon" href="https://previews.123rf.com/images/pandavector/pandavector1607/pandavector160700047/60024682-dog-muzzle-vector-icon-flat-style-singe-pet-icon-from-the-big-dog-collection-stock-vector.jpg">
     <title>Petcation</title>
     <script src="src/index.js" charset="utf-8"></script>
   </head>
   <body>
-
   <div class="navbar-fixed">
     <nav>
       <div class="nav-wrapper">
-        <a href="#top" class="brand-logo"><img src="https://www.littlehotelier.com/wp-content/uploads/2015/10/pet-friendly-hotels-bed-and-breakfast.jpg" class="circle" style="width:95px;height:60px;">PetCation</a>
+        <a href="#top" class="brand-logo brand-font"><img src="https://www.littlehotelier.com/wp-content/uploads/2015/10/pet-friendly-hotels-bed-and-breakfast.jpg" class="circle" style="width:95px;height:60px;">PetCation</a>
         <ul class="right hide-on-med-and-down">
           <li><a href="#pet-form-container">Add a Pet</a></li>
           <li><a href="#pet-list">My Pets</a></li>
           <li><a href="#transaction-form-container">Get A Pet Sitter</a></li>
           <li><a href="#sitter-list">Sitters</a></li>
-          <li><a href="#transaction-table">My Transactions</a></li>
+          <li><a href="#transaction-table">Reservations</a></li>
           <li><a href="javascript:window.location.reload(true)">Logout</a></li>
         </ul>
       </div>
     </nav>
+  </div>
+
+  <div class="welcome-container">
+    Welcome to PetCation! We provide a safe and secure platform to find Pet Sitters for your beloved Pets
   </div>
 
     <div class="container login-container">
@@ -81,6 +85,9 @@
            <option value="" disabled selected>Choose your Pet</option>
         <!-- Insert currentUser's pets here  -->
       </select>
+      <div id="transaction-calculator">
+
+      </div>
       <input class="btn" type="submit" value="submit">
     </form>
   </div>
