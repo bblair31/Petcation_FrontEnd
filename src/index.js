@@ -291,19 +291,61 @@ document.addEventListener('DOMContentLoaded', (event) => {
        })
       }
   }) // End of TransactionTable Listener
+
+  sitterList.addEventListener("click", (event) => {
+    let foundSitter
+    if (event.target.id === "like-button") {
+      foundSitter = findSitterLikes(allSitters, event.target.dataset.sitterid)
+      foundSitter.likes++
+
+      fetch(`http://localhost:3000/api/v1/sitters/${foundSitter.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          likes: `${foundSitter.likes}`
+        })
+      })
+      .then(response => response.json())
+      .then(sitterJson => {
+        event.target.innerText = `👍🏽 ${sitterJson.likes}`
+      })
+    } else if (event.target.id === "dislike-button") {
+      foundSitter = findSitterLikes(allSitters, event.target.dataset.sitterid)
+      foundSitter.dislikes++
+
+      fetch(`http://localhost:3000/api/v1/sitters/${foundSitter.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          dislikes: `${foundSitter.dislikes}`
+        })
+      })
+      .then(response => response.json())
+      .then(sitterJson => {
+        event.target.innerText = `👎🏽 ${sitterJson.dislikes}`
+      })
+    }
+  })
+
 }) // END DOMContentLoaded
 
 
 function renderSitters(sitters) {
   return sitters.map((sitter) => {
     return `
-    <div class="col s3">
-        <img class="circle z-depth-3" src="${sitter.photo_url}">
+    <div id="sitter-card" data-sitterid=${sitter.id} class="col s3 container">
+        <img class="circle z-depth-3" src="${sitter.photo_url} width="150" height="150"">
         <h5>${sitter.name} </h5>
         <p>Email: ${sitter.email} </p>
         <p>Location: ${sitter.location} </p>
-        <p>Rate/hour: ${sitter.rate} </p>
+        <p>Rate/hour: $${sitter.rate} </p>
         <p>Pet Capacity: ${sitter.capacity} </p>
+        <button id="like-button" data-sitterid=${sitter.id} type="button" name="button">👍🏽  ${sitter.likes} </button>
+        <button id="dislike-button" data-sitterid=${sitter.id} type="button" name="button">👎🏽  ${sitter.dislikes} </button>
       </div>
     `
   }).join('')
@@ -430,4 +472,8 @@ function renderTransactionCalculator(daysSat,totalCost){
     <h5>Length of Stay: ${daysSat}</h5>
     <h5>Estimated Cost: $${totalCost}</h4>
     `
+}
+
+function findSitterLikes(allSitters, sitterid) {
+  return allSitters.find(sitter => sitter.id == sitterid)
 }
