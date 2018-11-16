@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const hideContainer = document.getElementById('hidden-without-login')
   const sitterSelectDropdown = document.getElementById('sitter-select-dropdown')
   let petSelectDropdown = document.getElementById('pet-select-dropdown')
+  let transactionCalculatorDiv = document.getElementById('transaction-calculator')
 
   loginForm.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -109,6 +110,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         .then(res => res.json())
         .then((json) => {
           allPets.push(json)
+          petList.scrollIntoView({behavior: "smooth"})
           petForm.reset()
           let petSelectDropdown = document.getElementById('pet-select-dropdown')
           petSelectDropdown.innerHTML = renderPetDropdown(allPets, currentUser)
@@ -129,21 +131,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
          return json.id == pet.id
        })
 
-     editedPet.name = json.name
-     editedPet.age = json.age
-     editedPet.temperament = json.temperament
-     editedPet.species = json.species
-     editedPet.size = json.size
-     editedPet.photo_url = json.photo_url
-    petForm.reset()
-    let petSelectDropdown = document.getElementById('pet-select-dropdown')
-    petSelectDropdown.innerHTML = renderPetDropdown(allPets, currentUser)
-    petList.innerHTML = myPetsFilter(allPets)
-    formHeader.innerText = "Add a New Pet!"
-    petList.scrollIntoView({behavior: "smooth"})
-    })
-  }
-
+       editedPet.name = json.name
+       editedPet.age = json.age
+       editedPet.temperament = json.temperament
+       editedPet.species = json.species
+       editedPet.size = json.size
+       editedPet.photo_url = json.photo_url
+      petForm.reset()
+      let petSelectDropdown = document.getElementById('pet-select-dropdown')
+      petSelectDropdown.innerHTML = renderPetDropdown(allPets, currentUser)
+      petList.innerHTML = myPetsFilter(allPets)
+      formHeader.innerText = "Add a New Pet!"
+      petList.scrollIntoView({behavior: "smooth"})
+      })
+    }
   }) //End petForm Listener
 
 
@@ -179,7 +180,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         transactionTable.innerHTML += renderSingleTransaction(json, currentUser)
         transactionTable.scrollIntoView({behavior: "smooth"})
         transactionForm.reset()
-
+        transactionCalculatorDiv.innerHTML = ""
       })
     } else if (event.target.dataset.action === "edit-transaction") {
         let foundTransaction = findTransaction(event.target.dataset.transactionid, allTransactions)
@@ -203,6 +204,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
           editedRow.innerHTML = renderSingleTransaction(json)
          })
          transactionForm.reset()
+         transactionCalculatorDiv.innerHTML = ""
          let sitterSelectDropdown = document.getElementById("sitter-select-dropdown")
          sitterSelectDropdown.innerHTML = renderSitterDropdown(allSitters)
          transactionTable.scrollIntoView({behavior: "smooth"})
@@ -210,6 +212,24 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
   }) // End of transactionForm Event Listener
+
+  transactionForm.addEventListener('change', event => {
+    let transactionPet = transactionForm.querySelector('#pet-select-dropdown').value
+    let startDate = transactionForm.querySelector('#start-date').value
+    let endDate = transactionForm.querySelector('#end-date').value
+    let transactionSitter = transactionForm.querySelector('#sitter-select-dropdown').value
+    let transactionSitterObject = findSitter(transactionSitter, allSitters)
+    let daysSat = calculateDaysSat(startDate, endDate)
+    let totalCost =  calculateCost(daysSat, transactionSitterObject)
+
+    if (transactionSitter !== undefined && startDate !== "" && endDate !== "") {
+      transactionCalculatorDiv.innerHTML = renderTransactionCalculator(daysSat,totalCost)
+    } else {
+      transactionCalculatorDiv.innerHTML = ""
+    }
+
+
+  }) /// Transaction Form Change Listener
 
   petList.addEventListener('click', (event) => {
     if(event.target.name === "edit-pet") {
@@ -244,7 +264,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   transactionTable.addEventListener('click', (event) => {
     if (event.target.name === "edit-reservation") {
       let transactionId = event.target.parentElement.parentElement.dataset.transactionid
-      debugger
       let foundTransaction = findTransaction(transactionId, allTransactions)
       document.getElementById('sitter-select-dropdown').value = foundTransaction.sitter_id
       document.getElementById('start-date').value = foundTransaction.start_date
@@ -253,6 +272,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       transactionForm.dataset.action = "edit-transaction"
       transactionForm.querySelector("#transaction-header").innerText = "Edit this Sitter Reservation"
       transactionForm.dataset.transactionid = transactionId
+      transactionCalculatorDiv.innerHTML = renderTransactionCalculator(foundTransaction.days_sat, foundTransaction.total_cost)
       transactionForm.scrollIntoView({behavior: "smooth"})
 
     } else if (event.target.name === "delete-reservation") {
@@ -271,9 +291,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
        })
       }
   }) // End of TransactionTable Listener
-
-
-
 }) // END DOMContentLoaded
 
 
@@ -406,4 +423,11 @@ function renderSingleTransaction(transaction) {
     <td><button class="btn" type="button" name="delete-reservation">Delete</button></td>
    </tr>
   `
+}
+
+function renderTransactionCalculator(daysSat,totalCost){
+  return `
+    <h5>Length of Stay: ${daysSat}</h5>
+    <h5>Estimated Cost: $${totalCost}</h4>
+    `
 }
